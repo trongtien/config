@@ -1,24 +1,4 @@
--- LazyVim's statusline, ported to stand on its own.
---
--- Left : root dir | diagnostics | filetype icon + path | code context
--- Right: dap | pending plugin updates | git diff | progress + location
---
--- LazyVim builds this from its own runtime (LazyVim.lualine.*, LazyVim.root,
--- LazyVim.config.icons), none of which exists here, so the pieces that matter
--- are reimplemented below.
-
--- Every glyph the statusline draws, in one place. Each carries its own padding,
--- so the components below concatenate instead of padding at the call site.
---
--- Written out here rather than inline because the whole set was silently lost
--- once already: these are private-use codepoints, and the four-byte ones
--- (\u{f126d}, \u{f033e}) survived a round-trip that flattened every three-byte
--- one to a bare space. If the bar ever goes back to showing counts with no
--- symbol in front of them, this table is what to check.
 local icons = {
-    -- The gutter's diagnostic signs, reused verbatim from
-    -- lua/plugins/lspconfig/init.lua, so a count up here and a sign out in the
-    -- margin are recognisably the same thing.
     diagnostics = { Error = " ", Warn = " ", Info = "󰋼 ", Hint = "󰌵 " },
     git = { added = " ", modified = " ", removed = " " },
     misc = {
@@ -28,8 +8,6 @@ local icons = {
     },
 }
 
--- Foreground of a highlight group, resolved on each redraw so it keeps up with
--- colorscheme changes (base16/matugen swap these out at runtime).
 local function fg(name)
     return function()
         local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
@@ -236,6 +214,21 @@ return {
                 theme = palette_theme(),
                 globalstatus = vim.o.laststatus == 3,
                 disabled_filetypes = { statusline = { "snacks_dashboard", "dashboard", "alpha" } },
+                -- Thanh tab ở trên chỉ hiện khi có từ 2 tab trở lên
+                always_show_tabline = false,
+            },
+            -- Thanh tab ở trên cùng. Tên tab lấy từ t:tabname (đặt bằng `sr` /
+            -- :TabRename trong lua/config/screen.lua), chưa đặt thì là tên file.
+            tabline = {
+                lualine_a = {
+                    {
+                        "tabs",
+                        mode = 2, -- số thứ tự + tên tab
+                        max_length = function()
+                            return vim.o.columns
+                        end,
+                    },
+                },
             },
             sections = {
                 -- Deliberately bare on the left. The mode is already obvious

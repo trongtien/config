@@ -44,6 +44,11 @@ return {
 
 
         vim.keymap.set('n', '<leader>vh', builtin.help_tags, {desc="Search help tags"})
+
+        -- Danh sách mọi keymap, tìm theo phím hoặc desc; Enter để chạy keymap đó
+        vim.keymap.set('n', '<leader>x', function()
+            builtin.keymaps({ modes = { "n", "i", "c", "x", "o", "t" }, show_plug = false })
+        end, {desc="Show all keymaps"})
     end
 }
 

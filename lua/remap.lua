@@ -2,6 +2,7 @@ local keymap = vim.keymap
 
 require("config.resize")
 require("config.diagnostics")
+require("config.screen")
 
 local opts = { noremap = true, silent = true }
 keymap.set("i", "jk", "<Esc>")
@@ -42,4 +43,5 @@ keymap.set("n", "sh", "<C-w>h")
 keymap.set("n", "sk", "<C-w>k")
 keymap.set("n", "sj", "<C-w>j")
 keymap.set("n", "sl", "<C-w>l")
+
 
