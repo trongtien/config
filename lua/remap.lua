@@ -16,6 +16,9 @@ keymap.set("n", "<leader>pv", vim.cmd.Ex)
 keymap.set("n", "<ESC><ESC>", ":nohlsearch<CR>")
 keymap.set("n", "<leader>q", ":q<CR>")
 
+-- Terminal: <Esc><Esc> thoát terminal mode sang normal mode (một <Esc> vẫn gửi cho shell)
+keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+
 -- greatest remap ever
 keymap.set("x", "<leader>p", [["_dP]])
 
